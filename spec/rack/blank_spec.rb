@@ -23,7 +23,7 @@ describe Rack::Blank do
       response = Rack::MockRequest.new(subject).get('/v1/blank')
       expect(response.successful?).to be_truthy
       expect(response.body).to eq ''
-      expect(response.headers["Content-Type"]).to eq ""
+      expect(response.headers["Content-Type"]).to eq "text/plain"
     end
   end
 
@@ -33,6 +33,18 @@ describe Rack::Blank do
     end
     it do
       response = Rack::MockRequest.new(subject).get('/v1/blank', "CONTENT_TYPE" => 'application/json')
+      expect(response.successful?).to be_truthy
+      expect(response.body).to eq '{}'
+      expect(response.headers["Content-Type"]).to eq "application/json"
+    end
+  end
+
+  context 'return blank json response with json ext' do
+    subject do
+      Rack::Lint.new(Rack::Blank.new(app, path: "/v1/blank"))
+    end
+    it do
+      response = Rack::MockRequest.new(subject).get('/v1/blank.json')
       expect(response.successful?).to be_truthy
       expect(response.body).to eq '{}'
       expect(response.headers["Content-Type"]).to eq "application/json"

@@ -10,21 +10,22 @@ module Rack
     end
 
     def call(env)
-      if @path && env['PATH_INFO'] == @path
-        body = if env['CONTENT_TYPE'] == 'application/json'
-          JSON.generate({})
-        else
-          ''
+      request_path = "#{::File.dirname(env['PATH_INFO'])}/#{::File.basename(env['PATH_INFO'], '.*')}"
+      request_ext  = ::File.extname(env['PATH_INFO'])
+      if request_path == @path
+        body = ''
+        content_type = 'text/plain'
+        if env['CONTENT_TYPE'] == 'application/json' || request_ext == '.json'
+          body = JSON.generate({})
+          content_type = 'application/json'
         end
         headers = {
           "Content-Length" => body.bytesize.to_s,
-          "Content-Type" => env['CONTENT_TYPE'] || ''
+          "Content-Type" => content_type
         }
-        res = [200, headers, [body]]
-        return res
+        return [200, headers, [body]]
       end
-      res = @app.call(env)
-      return res
+      return @app.call(env)
     end
 
   end
