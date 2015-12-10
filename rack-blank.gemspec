@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary       = %q{Return blank response}
   spec.description   = %q{Return blank response}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/SpringMT/rack-blank"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
